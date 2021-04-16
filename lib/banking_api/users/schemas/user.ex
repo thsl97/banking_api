@@ -14,6 +14,8 @@ defmodule BankingApi.Schemas.User do
   alias BankingApi.Schemas.BankAccount
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, except: [:__meta__]}
+
   @required [:name, :email]
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

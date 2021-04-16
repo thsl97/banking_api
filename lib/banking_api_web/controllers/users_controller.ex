@@ -8,7 +8,9 @@ defmodule BankingApiWeb.UserController do
   alias BankingApi.Schemas.User
   alias BankingApi.Users
 
-  # def create(conn, params) do
-
-  # end
+  def create(conn, params) do
+    with {:ok, %User{} = user} <- Users.create_user(params) do
+      json(conn, user)
+    end
+  end
 end
