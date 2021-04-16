@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :banking_api,
   ecto_repos: [BankingApi.Repo],
