@@ -11,9 +11,15 @@ defmodule BankingApi.Users do
   its bank account afterwards. Might fail due to unique email constraing
   """
   def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Ecto.Changeset.put_change(:account, %BankAccount{balance: 1000})
-    |> Repo.insert()
+    case User.changeset(%User{}, attrs) do
+      %{valid?: true} = changeset ->
+        changeset
+        |> Ecto.Changeset.put_change(:account, %BankAccount{balance: 1000})
+        |> Repo.insert()
+      %{valid?: false} = changeset ->
+        {:error, changeset}
+    end
+  rescue Ecto.ConstraintError ->
+    {:error, :email_conflict}
   end
 end
