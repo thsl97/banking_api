@@ -15,6 +15,7 @@ defmodule BankingApi.BankAccounts do
   use Ecto.Schema
   alias BankingApi.Users
 
+  @primary_key {:id, :binary_id, autogenerate: true}
   schema "bank_accounts" do
     belongs_to :user, Users
     field :balance, :integer

@@ -3,10 +3,13 @@ defmodule BankingApi.Repo.Migrations.CreateBankAccount do
 
   def change do
     create table(:bank_accounts, primary_key: false) do
-      add :user_id, :uuid, [references(:users), primary_key: true]
+      add :id, :uuid, primary_key: true
+      add :user_id, references(:users, type: :uuid)
       add :balance, :integer
 
       timestamps()
     end
+
+    create unique_index(:bank_accounts, [:user_id])
   end
 end
