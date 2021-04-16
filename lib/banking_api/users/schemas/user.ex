@@ -1,4 +1,4 @@
-defmodule BankingApi.Users do
+defmodule BankingApi.Schemas.User do
   @moduledoc """
   The entity of User. An User can have only one bank account
 
@@ -11,13 +11,25 @@ defmodule BankingApi.Users do
   """
 
   use Ecto.Schema
+  alias BankingApi.Schemas.BankAccount
+  import Ecto.Changeset
 
+  @required [:name, :email]
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "users" do
     field :name, :string
     field :email, :string
-    has_one :account, {"user", BankingApi.BankAccounts}
+    has_one :account, {"user", BankAccount}
 
     timestamps()
+  end
+
+  def changeset(user, params) do
+    user
+    |> cast(params, @required)
+    |> validate_required(@required)
+    |> validate_length(:name, min: 3)
+    |> validate_format(:email, ~r/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
   end
 end

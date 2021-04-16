@@ -1,4 +1,4 @@
-defmodule BankingApi.BankAccounts do
+defmodule BankingApi.Schemas.BankAccount do
   @moduledoc """
   The entity of Bank Accounts. Establishes a one to one relationship to Users
   schema and uses User's id as primary key.
@@ -13,11 +13,12 @@ defmodule BankingApi.BankAccounts do
   """
 
   use Ecto.Schema
-  alias BankingApi.Users
+  alias BankingApi.Schemas.User
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "bank_accounts" do
-    belongs_to :user, Users
+    belongs_to :user, User
     field :balance, :integer
 
     timestamps()
