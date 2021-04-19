@@ -9,5 +9,6 @@ defmodule BankingApiWeb.Router do
     pipe_through :api
 
     post "/users/create", UserController, :create
+    patch "/accounts/:id/withdraw", AccountController, :withdraw
   end
 end

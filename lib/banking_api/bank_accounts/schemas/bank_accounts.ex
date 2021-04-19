@@ -14,6 +14,7 @@ defmodule BankingApi.Schemas.BankAccount do
 
   use Ecto.Schema
   alias BankingApi.Schemas.User
+  import Ecto.Changeset
 
   @derive {Jason.Encoder, except: [:__meta__, :user]}
 
@@ -24,5 +25,11 @@ defmodule BankingApi.Schemas.BankAccount do
     field :balance, :integer
 
     timestamps()
+  end
+
+  def changeset(account, params) do
+    account
+    |> cast(params, [:balance])
+    |> validate_number(:balance, greater_than_or_equal_to: 0)
   end
 end
