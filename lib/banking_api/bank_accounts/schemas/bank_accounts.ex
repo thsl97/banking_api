@@ -30,6 +30,6 @@ defmodule BankingApi.Schemas.BankAccount do
   def changeset(account, params) do
     account
     |> cast(params, [:balance])
-    |> validate_number(:balance, greater_than_or_equal_to: 0)
+    |> validate_number(:balance, greater_than_or_equal_to: 0, message: "Not enough balance")
   end
 end

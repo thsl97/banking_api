@@ -8,6 +8,8 @@ defmodule BankingApiWeb.UserController do
   alias BankingApi.Schemas.User
   alias BankingApi.Users
 
+  action_fallback BankingApiWeb.FallbackController
+
   def create(conn, params) do
     with {:ok, %User{} = user} <- Users.create_user(params) do
       conn

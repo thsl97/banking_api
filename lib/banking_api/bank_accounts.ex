@@ -32,4 +32,25 @@ defmodule BankingApi.BankAccounts do
   rescue
     ArithmeticError -> {:error, :invalid_amount}
   end
+
+  @doc """
+  Withdraws an amount from an account and adds it to another account
+  """
+  def transfer(source_account, destination_account, amount) do
+    case BankAccount.changeset(source_account, %{balance: source_account.balance - amount}) do
+      %{valid?: true} = source_changeset ->
+        Ecto.Multi.new()
+        |> Ecto.Multi.update(:source_acc, source_changeset)
+        |> Ecto.Multi.update(:destination_acc, BankAccount.changeset(destination_account, %{balance: destination_account.balance + amount}))
+        |> Repo.transaction()
+        |> case do
+          {:ok, %{destination_acc: destination_acc, source_acc: source_acc}} ->
+            {:ok, source_acc, destination_acc}
+          {:error, failed_operation, failed_value} ->
+            {:error, failed_operation, failed_value}
+          end
+      %{valid?: false} = changeset ->
+        {:error, changeset}
+    end
+  end
 end

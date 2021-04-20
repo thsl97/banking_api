@@ -14,7 +14,7 @@ defmodule BankingApi.Users do
     case User.changeset(%User{}, attrs) do
       %{valid?: true} = changeset ->
         changeset
-        |> Ecto.Changeset.put_change(:account, %BankAccount{balance: 1000})
+        |> Ecto.Changeset.put_change(:account, %BankAccount{balance: 100000})
         |> Repo.insert()
       %{valid?: false} = changeset ->
         {:error, changeset}

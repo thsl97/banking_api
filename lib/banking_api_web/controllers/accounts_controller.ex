@@ -7,6 +7,8 @@ defmodule BankingApiWeb.AccountController do
   alias BankingApi.Schemas.BankAccount
   alias BankingApi.BankAccounts
 
+  # action_fallback BankingApiWeb.FallbackController
+
   @doc """
   Receives an account id and an amount to withdraw. Amount must be a positive integer.
   """
@@ -40,5 +42,17 @@ defmodule BankingApiWeb.AccountController do
           details: "Amount must be an integer"
         })
     end
+  end
+
+  def transfer(conn, %{"id" => account_id, "destination_id" => destination_account_id, "amount" => amount}) do
+    with {:ok, %BankAccount{} = bank_account} <- BankAccounts.fetch(account_id),
+      {:ok, %BankAccount{} = destination_account} <- BankAccounts.fetch(destination_account_id),
+      {:ok, source_acc, destination_acc} <- BankAccounts.transfer(bank_account, destination_account, amount) do
+        conn
+        |> json(%{
+          source_account: source_acc,
+          destination_account: destination_acc
+        })
+      end
   end
 end

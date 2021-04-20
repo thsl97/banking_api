@@ -11,6 +11,15 @@ defmodule BankingApiWeb.FallbackController do
     })
   end
 
+  def call(conn, {:error, :not_found}) do
+    conn
+    |> put_status(:not_found)
+    |> json(%{
+      type: "not_found",
+      description: "The requested resource was not found on this server"
+    })
+  end
+
   defp convert_changeset_errors_to_json(errors) do
     errors
     |> Enum.map(fn {key, {message, _opts}} -> {key, message} end)
